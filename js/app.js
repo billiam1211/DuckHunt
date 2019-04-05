@@ -3,13 +3,14 @@ console.log('js is live');
 class Target {
 	constructor() {
 		this.value = 1;
+		this.row = (Math.ceil(Math.random() * 6))
 		// row -- random row bt 1 and 6
 	}
 
 }
 
 const user = {
-	shoot(coords){
+	shoot(coordinates){
 		//when user presses spacebar, it will trigger the shoot function to pew pew
 	}
 }
@@ -28,7 +29,6 @@ const game = {
 			$('#timer').text(this.time) //grabs time and inserts in the timer window
 			$('#score').text(this.score)//adds current score to #score div
 			// console.log(this.time);
-			this.move()
 		}, 500)
 		this.createTargets(); //this function calls the below function to begin creating Targets
 	},
@@ -40,13 +40,8 @@ const game = {
 		console.log(this.targets);
 	},
 	move(){
-		setInterval(() => {
-			this.marginRate += 1;
-
 			// if there's a current duck
 			// move it
-		}, 250)
-		$('#duck').css("margin-left", this.marginRate)
 	},
 	newDuck() {
 		// get duck from array
