@@ -29,7 +29,7 @@ h1 {
 	background: url(https://static.vecteezy.com/system/resources/previews/000/097/801/non_2x/keep-off-the-grass-background-free-vector.png);
 	background-size: cover;
 	border-radius: 0%;
-	cursor: url(https://image.flaticon.com/icons/png/128/18/18554.png), auto;
+	cursor: url(https://image.flaticon.com/icons/png/128/18/18554.png) 67 67, auto;
 }
 
 #row1, #row2, #row3, #row4, #row5, #row6 {
@@ -71,4 +71,9 @@ h1 {
 	display: center
 	height: 200px;
 	width: 200px;
+}
+
+img {
+	height: 100px;
+	width: 100px;
 }
