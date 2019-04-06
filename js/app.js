@@ -15,6 +15,7 @@ const user = {
     		game.score += 1;//adds 1 to score 
     		game.currentDuck.pop()//removes the duck from game.currentDuck array
     		$('img').remove()
+    		game.newDuck()
     	}else{
     		console.log('Miss!');
     	}
@@ -39,6 +40,8 @@ const game = {
             // console.log(this.time);
         }, 500)
         this.createTargets(); //this function calls the below function to begin creating Targets
+        this.newDuck();//calls the newDuck function to put a new duck on the screen
+
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
         for (let i = 0; i < 10; i++) {
@@ -54,7 +57,6 @@ const game = {
     newDuck() {
         // get duck from array, make it be current duck
         this.currentDuck.push(this.targets[0])
-        this.targets.shift()
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
         const newDuckDiv = $('<div/>')
@@ -85,9 +87,7 @@ const game = {
                 }
             }
         }
-
-
-
+        this.targets.shift() // removes the first element from the game.targets array
     }
 
     // 1. start --  get new duck
