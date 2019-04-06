@@ -1,79 +1,65 @@
+body {
+	background-color: black;
+}
 h1 {
-	text-align: center;
-	color: Yellow;
-	background-color: black;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    color: Yellow;
+    background-color: black;
 }
-
-#topStats {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	background-color: black;
-/*	width: 600px;*/
-}
-#timer, #score {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	text-align: center;
-	background-color: white;
-	height: 100px;
-	width: 100px;
-	border-radius: 25%;
-}
-
 #screen {
-	height: 600px;
-	width: 600px;
-	background-color: rgba(200, 0, 0, .4);
-	background: url(https://static.vecteezy.com/system/resources/previews/000/097/801/non_2x/keep-off-the-grass-background-free-vector.png);
-	background-size: cover;
-	border-radius: 0%;
-	cursor: url(https://image.flaticon.com/icons/png/128/18/18554.png) 67 67, auto;
+    height: 600px;
+    width: 600px;
+    background: url(https://static.vecteezy.com/system/resources/previews/000/097/801/non_2x/keep-off-the-grass-background-free-vector.png);
+    background-size: cover;
+    border-radius: 0%;
+    cursor: url(https://image.flaticon.com/icons/png/128/18/18554.png) 67 67, auto;
+    margin-bottom: 23px;
 }
-
-#row1, #row2, #row3, #row4, #row5, #row6 {
-	height: 100px;
-	width: 600px;
+#row1,
+#row2,
+#row3,
+#row4,
+#row5,
+#row6 {
+    height: 100px;
+    width: 600px;
 }
-
 #container {
-	height: 600px;
-	width: 600px;
-	background-color: rgba(0, 0, 0, .3);
+    height: 600px;
+    width: 600px;
 }
-
 #stats {
-	background-color: black;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	padding-top: 0 auto;
+	font-family: 'Press Start 2P', cursive;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 0 auto;
 }
-
-#reload, #ammo {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	color: yellow;
-	text-align: center;
-	background-color: rgba(200, 0, 0, .5);
-	height: 75px;
-	width: 75px;
-	border-radius: 30%;
+#reload,
+#ammo,
+#timer, 
+#score {
+	font-family: 'Press Start 2P', cursive;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: yellow;
+    text-align: center;
+    background-color: rgba(200, 0, 0, .5);
+    height: 125px;
+    width: 125px;
+    border-radius: 25%;
 }
-
 #row3 {
-	text-align: center;
+    text-align: center;
 }
-
 #duck {
-	display: center
-	height: 200px;
-	width: 200px;
+    display: center height: 200px;
+    width: 200px;
 }
-
 img {
-	height: 100px;
-	width: 100px;
+    height: 100px;
+    width: 100px;
 }

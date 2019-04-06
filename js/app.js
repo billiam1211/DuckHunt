@@ -10,18 +10,27 @@ class Target {
 
 const user = {
     shoot(target) {
-    	if(target.classList.contains("duck") == true) {//check to see if element being clicked on has the class of duck
-    		console.log('Boom!!! You hit the duck!!!');
-    		game.score += 1;//adds 1 to score 
-    		game.currentDuck.pop()//removes the duck from game.currentDuck array
-    		$('img').remove()
-    		game.newDuck()
-    	}else{
-    		console.log('Miss!');
-    	}
-        //if class of .duck is true, then remove from currentDuck and call newDuck() function
-        //remove parent div of duckPic from the DOM/screen
-       }
+        if (game.ammo > 0) {
+            if (target.classList.contains("duck") == true) { //check to see if element being clicked on has the class of duck
+                console.log('Boom!!! You hit the duck!!!');
+                game.score += 1; //adds 1 to score 
+                game.currentDuck.pop() //removes the duck from game.currentDuck array
+                $('img').remove() //remove parent div of duckPic from the DOM/screen
+                game.newDuck() //call newDuck() function
+                game.ammo -= 1;
+            } else {
+                console.log('Miss!');
+                game.ammo -= 1;
+            }
+        } else {
+            if (game.ammo = 0) {
+                console.log('You need to reload!');
+            }
+        }
+    },
+    reload() {//adds ammo to the game.ammo value. Only issue is you can keep adding ammo without limit and clicking on the reload button expends 1 round
+    	game.ammo += 6;
+    }
 }
 
 const game = {
@@ -32,19 +41,21 @@ const game = {
     intervalId: null,
     marginRate: 0,
     currentDuck: [],
+
     startGame() { //function to begin the game
         this.intervalId = setInterval(() => { //starts the timer and adds 1
             this.time += 1;
-            $('#timer').text(this.time) //grabs time and inserts in the timer window
-            $('#score').text(this.score) //adds current score to #score div
+            $('#timer').text('Time: ' + this.time) //grabs time and inserts in the timer window
+            $('#score').text('Score: ' + this.score) //adds current score to #score div
+            $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
         }, 500)
         this.createTargets(); //this function calls the below function to begin creating Targets
-        this.newDuck();//calls the newDuck function to put a new duck on the screen
+        this.newDuck(); //calls the newDuck function to put a new duck on the screen
 
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
             const newTarget = new Target()
             this.targets.push(newTarget)
         }
@@ -60,7 +71,7 @@ const game = {
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
         const newDuckDiv = $('<div/>')
-        const duckPic = $('<img/>').addClass("duck")// give the duckPic a class 
+        const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
         duckPic.attr("src", "http://images.clipartpanda.com/mallard-clip-art-eend3.png")
         newDuckDiv.append(duckPic)
 
@@ -103,6 +114,7 @@ $('#ammo').on('click', () => {
 })
 
 $('#reload').on('click', () => {
+	user.reload()
     console.log('reloading!!!');
     //when user clicks this button, it will +5 to their ammunition count
 })
@@ -126,7 +138,3 @@ $(document).on('click', (e) => {
     console.log(e.target);
     user.shoot(e.target);
 })
-
-
-
-
