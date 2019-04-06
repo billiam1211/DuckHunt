@@ -52,23 +52,38 @@ const user = {
     }
 }
 const game = {
+    rounds: 0,
     score: 0,
-    time: 0,
+    time: null,
     ammo: 5,
     targets: [],
     intervalId: null,
-    marginRate: 0,
     currentDuck: [],
     startGame() { //function to begin the game
+        this.rounds += 1;
         this.intervalId = setInterval(() => { //starts the timer and adds 1
             this.time += 1;
             $('#timer').text('Time: ' + this.time) //grabs time and inserts in the timer window
             $('#score').text('Score: ' + this.score) //adds current score to #score div
             $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
-        }, 500)
+            this.roundCounter();
+        }, 250)
         this.createTargets(); //this function calls the below function to begin creating Targets
         this.newDuck(); //calls the newDuck function to put a new duck on the screen
+    },
+    roundCounter() {
+        //add 1 to the game round count
+        //when time reaches 60 seconds => stop game, call start game function?
+        //increase rate at which ducks move across the screen
+        if(this.time % 60 === 0 && this.time > 0){
+            this.rounds += 1;
+            clearInterval(this.intervalId)
+            console.log('game stopped...')
+            //store player 1 round 1 score in an array?
+            //add message indicating that round 2 will begin
+            //call startGame() function to start the new round
+        }
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
         for (let i = 0; i < 50; i++) {
