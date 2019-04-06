@@ -1,13 +1,10 @@
 console.log('js is live');
-
 class Target {
     constructor() {
         this.value = 1;
         this.row = (Math.ceil(Math.random() * 6)) // row -- random row between 1 and 6
     }
-
 }
-
 const user = {
     shoot(target) {
         if (game.ammo > 0) {
@@ -28,11 +25,32 @@ const user = {
             }
         }
     },
-    reload() {//adds ammo to the game.ammo value. Only issue is you can keep adding ammo without limit and clicking on the reload button expends 1 round
-    	game.ammo += 6;
+    reload() { //adds ammo to the game.ammo value. Only issue is you can keep adding ammo without limit and clicking on the reload button expends 1 round
+        if (game.ammo = 0) {
+            game.ammo += 6;
+        } else {
+            if (game.ammo = 1) {
+                game.ammo += 5
+            } else {
+                if (game.ammo = 2) {
+                    game.ammo += 4
+                } else {
+                    if (game.ammo = 3) {
+                        game.ammo += 3
+                    } else {
+                        if (game.ammo = 4) {
+                            game.ammo += 2
+                        } else {
+                            if (game.ammo = 5) {
+                                console.log('Ammo is full');
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-
 const game = {
     score: 0,
     time: 0,
@@ -41,7 +59,6 @@ const game = {
     intervalId: null,
     marginRate: 0,
     currentDuck: [],
-
     startGame() { //function to begin the game
         this.intervalId = setInterval(() => { //starts the timer and adds 1
             this.time += 1;
@@ -52,7 +69,6 @@ const game = {
         }, 500)
         this.createTargets(); //this function calls the below function to begin creating Targets
         this.newDuck(); //calls the newDuck function to put a new duck on the screen
-
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
         for (let i = 0; i < 50; i++) {
@@ -64,6 +80,10 @@ const game = {
     move() {
         // if there's a current duck
         // move it
+        // $('img').animate
+        // ({
+        //     'margin-left' : (parseInt($(this).parent().css('width')) - parseInt($('img').css('width'))) + 'px'
+        // });
     },
     newDuck() {
         // get duck from array, make it be current duck
@@ -74,7 +94,6 @@ const game = {
         const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
         duckPic.attr("src", "http://images.clipartpanda.com/mallard-clip-art-eend3.png")
         newDuckDiv.append(duckPic)
-
         if (this.targets[0].row == 1) {
             newDuckDiv.appendTo($('#row1'))
         } else {
@@ -100,12 +119,9 @@ const game = {
         }
         this.targets.shift() // removes the first element from the game.targets array
     }
-
     // 1. start --  get new duck
     // 2. previous duck goes off screen  -- destroy the old duck, get new duck
     // 3. duck gets shot -- destroy old duck, get new duck
-
-
     // when duck gets shot, remember to destroy div
 }
 
@@ -114,23 +130,18 @@ $('#ammo').on('click', () => {
 })
 
 $('#reload').on('click', () => {
-	user.reload()
+    user.reload()
     console.log('reloading!!!');
     //when user clicks this button, it will +5 to their ammunition count
 })
-
 $('newGame').on('click', () => {
     //when user clicks new game, it will show them the rules and then begin the game.startGame() function
 })
-
 $('#duck').on('click', (event) => {
     // event will contain the location of the click --- console.log it to check
     // call user.shoot(), pass in that info
     console.log('duck has been clicked');
 })
-
-
-
 // for debugging -- gives you console access to the most recently clicked element as $it
 let $it;
 $(document).on('click', (e) => {
