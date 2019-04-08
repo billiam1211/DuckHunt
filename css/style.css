@@ -8,7 +8,11 @@ h1 {
     color: Yellow;
     background-color: black;
 }
-
+#rightSideBoxes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 #msgBox {
     display: flex;
     justify-content: center;
@@ -17,12 +21,24 @@ h1 {
     height: 250px;
     width: 300px;
     background-color: white;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-top: 150px;
     border-radius: 30%;
     border: solid 5px blue;
     font-family: 'Press Start 2P', cursive;
-
+}
+#newGame {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 150px;
+    width: 150px;
+    background-color: rgba(0, 255, 0, 1);
+    margin-left: 90px;
+    border-radius: 30%;
+    border: solid 5px blue;
+    font-family: 'Press Start 2P', cursive; 
 }
 #screen {
     height: 600px;

@@ -7,6 +7,7 @@ class Target {
 }
 const user = {
     shoot(target) {
+        console.log(target);
         if (game.ammo > 0) {
             if (target.classList.contains("duck") == true) { //check to see if element being clicked on has the class of duck
                 console.log('Boom!!! You hit the duck!!!');
@@ -17,6 +18,7 @@ const user = {
                 game.newDuck() //call newDuck() function
                 game.ammo -= 1;
             } else {
+                $('#msgBox').text('Miss!')
                 console.log('Miss!');
                 game.ammo -= 1;
             }
@@ -28,22 +30,22 @@ const user = {
     },
     reload() { //adds ammo to the game.ammo value. Only issue is you can keep adding ammo without limit and clicking on the reload button expends 1 round
         if (game.ammo == 0) {
-            game.ammo += 6;
+            game.ammo += 5;
         } else {
             if (game.ammo = 1) {
-                game.ammo += 5
+                game.ammo += 4
             } else {
                 if (game.ammo = 2) {
-                    game.ammo += 4
+                    game.ammo += 3
                 } else {
                     if (game.ammo = 3) {
-                        game.ammo += 3
+                        game.ammo += 2
                     } else {
                         if (game.ammo = 4) {
-                            game.ammo += 2
+                            game.ammo += 1
                         } else {
                             if (game.ammo = 5) {
-                                 $('#msgBox').text('Ammo full.')
+                                $('#msgBox').text('Ammo full.')
                                 console.log('Ammo is full');
                             }
                         }
@@ -61,7 +63,7 @@ const game = {
     ammo: 5,
     targets: [],
     intervalId: null,
-    auxInterval: null,
+    // auxInterval: null,
     currentDuck: [],
     startGame() { //function to begin the game
         this.rounds += 1;
@@ -71,8 +73,8 @@ const game = {
             $('#score').text('Score: ' + this.score) //adds current score to #score div
             $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
-            // this.roundCounter();
-            if(this.ammo == 0){
+            this.roundCounter();
+            if (this.ammo == 0) {
                 $('#msgBox').text('Reload to continue shooting!')
             }
         }, 250)
@@ -83,20 +85,30 @@ const game = {
         //add 1 to the game round count
         //when time reaches 60 seconds => stop game, call start game function?
         //increase rate at which ducks move across the screen
-        if(this.time % 60 === 0 && this.time > 0){
+        if (this.time % 60 === 0 && this.time > 0) {
             this.rounds += 1;
             clearInterval(this.intervalId)
             console.log('game stopped...')
+            this.time = 0;
+            game.currentDuck.pop() //removes the duck from game.currentDuck array
+            $('img').remove() //remove parent div of duckPic from the DOM/screen
             //store player 1 round 1 score in an array?
             //add message indicating that round 2 will begin
             //call startGame() function to start the new round
-            this.auxInterval = setInterval(() => {
-                if(this.countDown > 0){
-                    this.countDown -= 1;
-                console.log('Round starts in ' + this.countDown);
-                $('#msgBox').text('Round starts in ' + this.countDown)
+            let secondsLeft = 3;
+            let auxInterval = setInterval(() => {
+                if (secondsLeft > 0) {
+                    console.log('Round ' + this.rounds + ' starts in ' + secondsLeft);
+                    $('#msgBox').text('Round ' + this.rounds + ' starts in ' + secondsLeft)
+                    secondsLeft -= 1;
+                }
+                else {
+                    clearInterval(auxInterval)
+                    this.startGame();
+
                 }
             }, 1000)
+
         }
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
@@ -116,7 +128,7 @@ const game = {
         this.currentDuck.push(this.targets[0])
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
-        const newDuckDiv = $('<div/>')     
+        const newDuckDiv = $('<div/>')
         const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
         duckPic.attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif")
         newDuckDiv.append(duckPic)
@@ -146,14 +158,26 @@ const game = {
         this.targets.shift() // removes the first element from the game.targets array
         newDuckDiv.animate({
             marginLeft: "+=521px"
-        }, 5000)
-            // if(this.currentDuck.marginLeft = "510px"){
-            //     this.currentDuck.pop() //removes the duck from game.currentDuck array
-            //     $('img').remove() //remove parent div of duckPic from the DOM/screen
-            //     this.newDuck() //call newDuck() function
-            //     //if the newDuckDiv reaches 510px, then remove it
-            // }
+        }, 
+        // how long the animation should take
+        5000, 
+        // what should happen when the animation is done
+        () => {
+            console.log("duck is done moving");
+            // remove duck w/ jquery
+        })
 
+        // newDuckDiv.animate({
+        //     transform: scaleX(-1)
+        //     marginLeft: "-=521px"
+        // }, 2000)
+
+        // if(this.currentDuck.marginLeft = "510px"){
+        //     this.currentDuck.pop() //removes the duck from game.currentDuck array
+        //     $('img').remove() //remove parent div of duckPic from the DOM/screen
+        //     this.newDuck() //call newDuck() function
+        //     //if the newDuckDiv reaches 510px, then remove it
+        // }
     }
     // 1. start --  get new duck
     // 2. previous duck goes off screen  -- destroy the old duck, get new duck
@@ -170,7 +194,9 @@ $('#reload').on('click', () => {
     console.log('reloading!!!');
     //when user clicks this button, it will +5 to their ammunition count
 })
-$('newGame').on('click', () => {
+$('#newGame').on('click', () => {
+    console.log('new game has been clicked');
+    game.startGame();
     //when user clicks new game, it will show them the rules and then begin the game.startGame() function
 })
 $('#duck').on('click', (event) => {
@@ -179,9 +205,18 @@ $('#duck').on('click', (event) => {
     console.log('duck has been clicked');
 })
 // for debugging -- gives you console access to the most recently clicked element as $it
-let $it;
-$(document).on('click', (e) => {
-    $it = $(e.target);
-    console.log(e.target);
+
+// let $it;
+// $(document).on('click', (e) => {
+//     $it = $(e.target);
+//     console.log(e.target);
+// })
+
+$('#screen').on('click', (e) => {
+    console.log('screen has been clicked');
     user.shoot(e.target);
 })
+// add listener for #screen
+    // user.shoot(e.target);
+
+
