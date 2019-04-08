@@ -10,6 +10,7 @@ const user = {
         if (game.ammo > 0) {
             if (target.classList.contains("duck") == true) { //check to see if element being clicked on has the class of duck
                 console.log('Boom!!! You hit the duck!!!');
+                $('#msgBox').text('Boom! You the the duck!!!')
                 game.score += 1; //adds 1 to score 
                 game.currentDuck.pop() //removes the duck from game.currentDuck array
                 $('img').remove() //remove parent div of duckPic from the DOM/screen
@@ -26,7 +27,7 @@ const user = {
         }
     },
     reload() { //adds ammo to the game.ammo value. Only issue is you can keep adding ammo without limit and clicking on the reload button expends 1 round
-        if (game.ammo = 0) {
+        if (game.ammo == 0) {
             game.ammo += 6;
         } else {
             if (game.ammo = 1) {
@@ -42,6 +43,7 @@ const user = {
                             game.ammo += 2
                         } else {
                             if (game.ammo = 5) {
+                                 $('#msgBox').text('Ammo full.')
                                 console.log('Ammo is full');
                             }
                         }
@@ -55,9 +57,11 @@ const game = {
     rounds: 0,
     score: 0,
     time: null,
+    countDown: 6,
     ammo: 5,
     targets: [],
     intervalId: null,
+    auxInterval: null,
     currentDuck: [],
     startGame() { //function to begin the game
         this.rounds += 1;
@@ -67,7 +71,10 @@ const game = {
             $('#score').text('Score: ' + this.score) //adds current score to #score div
             $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
-            this.roundCounter();
+            // this.roundCounter();
+            if(this.ammo == 0){
+                $('#msgBox').text('Reload to continue shooting!')
+            }
         }, 250)
         this.createTargets(); //this function calls the below function to begin creating Targets
         this.newDuck(); //calls the newDuck function to put a new duck on the screen
@@ -83,6 +90,13 @@ const game = {
             //store player 1 round 1 score in an array?
             //add message indicating that round 2 will begin
             //call startGame() function to start the new round
+            this.auxInterval = setInterval(() => {
+                if(this.countDown > 0){
+                    this.countDown -= 1;
+                console.log('Round starts in ' + this.countDown);
+                $('#msgBox').text('Round starts in ' + this.countDown)
+                }
+            }, 1000)
         }
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
@@ -95,19 +109,16 @@ const game = {
     move() {
         // if there's a current duck
         // move it
-        // $('img').animate
-        // ({
-        //     'margin-left' : (parseInt($(this).parent().css('width')) - parseInt($('img').css('width'))) + 'px'
-        // });
+
     },
     newDuck() {
         // get duck from array, make it be current duck
         this.currentDuck.push(this.targets[0])
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
-        const newDuckDiv = $('<div/>')
+        const newDuckDiv = $('<div/>')     
         const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
-        duckPic.attr("src", "http://images.clipartpanda.com/mallard-clip-art-eend3.png")
+        duckPic.attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif")
         newDuckDiv.append(duckPic)
         if (this.targets[0].row == 1) {
             newDuckDiv.appendTo($('#row1'))
@@ -133,6 +144,16 @@ const game = {
             }
         }
         this.targets.shift() // removes the first element from the game.targets array
+        newDuckDiv.animate({
+            marginLeft: "+=521px"
+        }, 5000)
+            // if(this.currentDuck.marginLeft = "510px"){
+            //     this.currentDuck.pop() //removes the duck from game.currentDuck array
+            //     $('img').remove() //remove parent div of duckPic from the DOM/screen
+            //     this.newDuck() //call newDuck() function
+            //     //if the newDuckDiv reaches 510px, then remove it
+            // }
+
     }
     // 1. start --  get new duck
     // 2. previous duck goes off screen  -- destroy the old duck, get new duck

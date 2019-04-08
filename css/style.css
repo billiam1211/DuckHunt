@@ -1,11 +1,28 @@
 body {
 	background-color: black;
+    display: inline-flex;
 }
 h1 {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
     color: Yellow;
     background-color: black;
+}
+
+#msgBox {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 250px;
+    width: 300px;
+    background-color: white;
+    margin-left: 50px;
+    margin-top: 150px;
+    border-radius: 30%;
+    border: solid 5px blue;
+    font-family: 'Press Start 2P', cursive;
+
 }
 #screen {
     height: 600px;
@@ -48,12 +65,13 @@ h1 {
     color: yellow;
     text-align: center;
     background-color: rgba(200, 0, 0, .5);
+    border: solid 5px blue;
     height: 125px;
     width: 125px;
     border-radius: 25%;
 }
 #row3 {
-    text-align: center;
+/*    text-align: center;*/
 }
 #duck {
     display: center height: 200px;
