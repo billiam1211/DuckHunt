@@ -6,6 +6,7 @@ class Target {
         this.id = id
     }
 }
+
 const user = {
     shoot(target) {
         console.log(target)
@@ -13,12 +14,8 @@ const user = {
             if (target.classList.contains("duck") == true) { //check to see if element being clicked on has the class of duck
                 // console.log('Boom!!! You hit the duck!!!');
                 $('#msgBox').text('Boom! You the the duck!!!')
-                game.score += 1; //adds 1 to score 
-                game.currentDuck.pop() //removes the duck from game.currentDuck array
-                // $(`#${idOfDeadDuck}`).remove();
-                $('#newDuckDiv').remove();
-                $('img').remove() //remove parent div of duckPic from the DOM/screen
-                // game.newDuck() //call newDuck() function
+                game.score += 1; //adds 1 to score
+                game.removeDuckDiv(target.id);
                 game.ammo -= 1;
             } else {
                 $('#msgBox').text('Miss!')
@@ -65,8 +62,10 @@ const game = {
     time: null,
     countDown: 6,
     ammo: 5,
-    targets: [],
     intervalId: null,
+    targets: [],
+    targetDivArr: [],
+    readyTargets: [],
     currentDuck: [],
     startGame() { //function to begin the game
         this.rounds += 1;
@@ -77,9 +76,6 @@ const game = {
             $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
             // this.roundCounter();
-            if(this.time % 4 === 0){
-            this.newDuck();
-            }
             if (this.ammo == 0) {
                 $('#msgBox').text('Reload to continue shooting!')
             }
@@ -118,39 +114,63 @@ const game = {
     //     }
     // },
     createTargets() { //function to instantiate targets in a loop and store them in an array
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 50; i++) { //creates targets with unique row # and stores them in targets array
             const newTarget = new Target(i)
             this.targets.push(newTarget)
         }
-        // console.log(this.targets);
+
+
+        for (let i = 0; i < 50; i++) { //creates divs, which will store targets with unique ID and stores them in targetDiv array
+            const $targetDiv = $('<div/>').attr('id', i)
+            this.targetDivArr.push($targetDiv)
+        }
+
+        for (let i = 0; i < 50; i++) {//takes the targets and appends them into a div and stores into a new array
+            this.targetDivArr[i].append(this.targets[i])
+            this.readyTargets.push(this.targetDivArr[i])
+        }
+
     },
     newDuck() {
         // get duck from array, make it be current duck
-        this.currentDuck.push(this.targets[0])
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
-        const newDuckDiv = $('<div/>').attr('id', `${this.currentDuck.id}`)
-        console.log(newDuckDiv.attr('style'));
-        const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
-        duckPic.attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif")
-        newDuckDiv.append(duckPic)
+
+        // if the timer is at zero, call gameOver function and return 
+
+        // if (..) {
+        //     gameOVer
+        //     return 
+        // }
+
+        const duckPic = $('<img/>').addClass("duck").attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif") // give the duckPic a class and add image of duck
+
+        const duckID = "duck-" + this.readyTargets[0][0].id
+
+        duckPic.attr("id", duckID)
+
+        // duckPic.attr("id", )
+
+        this.currentDuck.push(this.readyTargets[0])
+        this.currentDuck[0].append(duckPic)
+
         if (this.targets[0].row == 1) {
-            newDuckDiv.appendTo($('#row1'))
+            this.currentDuck[0].appendTo($('#row1'))
         } else {
             if (this.targets[0].row == 2) {
-                newDuckDiv.appendTo($('#row2'))
+                 this.currentDuck[0].appendTo($('#row2'))
             } else {
                 if (this.targets[0].row == 3) {
-                    newDuckDiv.appendTo($('#row3'))
+                     this.currentDuck[0].appendTo($('#row3'))
                 } else {
                     if (this.targets[0].row == 4) {
-                        newDuckDiv.appendTo($('#row4'))
+                         this.currentDuck[0].appendTo($('#row4'))
                     } else {
                         if (this.targets[0].row == 5) {
-                            newDuckDiv.appendTo($('#row5'))
+                             this.currentDuck[0].appendTo($('#row5'))
                         } else {
                             if (this.targets[0].row == 6) {
-                                newDuckDiv.appendTo($('#row6'))
+                                 this.currentDuck[0].appendTo($('#row6'))
                             }
                         }
                     }
@@ -159,7 +179,9 @@ const game = {
         }
         this.targets.shift() // removes the first element from the game.targets array
 
-        newDuckDiv.animate({ // animates the div holding the duck img to move across the screen
+        const thisDuckID = this.currentDuck[0].id
+
+        this.currentDuck[0].animate({ // animates the div holding the duck img to move across the screen
                 marginLeft: "+=521px"
             }, 
             // how long the animation should take
@@ -167,13 +189,34 @@ const game = {
             // what should happen when the animation is done
             () => {
                 console.log("duck is done moving")
-                    this.currentDuck.pop() //removes the duck from game.currentDuck array
-                    // $('img').remove() //remove parent div of duckPic from the DOM/screen
-                    newDuckDiv.remove();
+                    //remove parent div of duckPic from the DOM/screen
+
+                    if (this.currentDuck[0]) {
+                        const duckToRemoveID = this.currentDuck[0][0].id
+
+                        this.removeDuckDiv(duckToRemoveID);     
+                    }
+
+
+                    this.newDuck();
+
                     // this.newDuck() //call newDuck() function
+                    /*     targets: [],
+                            targetDivArr: [],
+                            readyTargets: [],
+                            currentDuck: [],*/
             }
         )
 
+    },
+    removeDuckDiv(id){
+        const idToRemove = "#" + id;
+        $(idToRemove).remove();
+        this.currentDuck.shift();
+        this.readyTargets.shift();
+        this.targetDivArr.shift();
+        this.targets.shift();
+ 
     }
     // 1. start --  get new duck
     // 2. previous duck goes off screen  -- destroy the old duck, get new duck
@@ -200,13 +243,6 @@ $('#duck').on('click', (event) => {
     // call user.shoot(), pass in that info
     console.log('duck has been clicked');
 })
-// for debugging -- gives you console access to the most recently clicked element as $it
-
-// let $it;
-// $(document).on('click', (e) => {
-//     $it = $(e.target);
-//     console.log(e.target);
-// })
 
 $('#screen').on('click', (e) => {
     console.log('screen has been clicked');
@@ -220,3 +256,11 @@ $(document).on('keydown', (e) => {
 
     }
 })
+
+// for debugging -- gives you console access to the most recently clicked element as $it
+
+// let $it;
+// $(document).on('click', (e) => {
+//     $it = $(e.target);
+//     console.log(e.target);
+// })
