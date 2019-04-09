@@ -1,30 +1,34 @@
 console.log('js is live');
 class Target {
-    constructor() {
+    constructor(id) {
         this.value = 1;
         this.row = (Math.ceil(Math.random() * 6)) // row -- random row between 1 and 6
+        this.id = id
     }
 }
 const user = {
     shoot(target) {
-        console.log(target);
+        console.log(target)
         if (game.ammo > 0) {
             if (target.classList.contains("duck") == true) { //check to see if element being clicked on has the class of duck
-                console.log('Boom!!! You hit the duck!!!');
+                // console.log('Boom!!! You hit the duck!!!');
                 $('#msgBox').text('Boom! You the the duck!!!')
                 game.score += 1; //adds 1 to score 
                 game.currentDuck.pop() //removes the duck from game.currentDuck array
+                // $(`#${idOfDeadDuck}`).remove();
+                $('#newDuckDiv').remove();
                 $('img').remove() //remove parent div of duckPic from the DOM/screen
-                game.newDuck() //call newDuck() function
+                // game.newDuck() //call newDuck() function
                 game.ammo -= 1;
             } else {
                 $('#msgBox').text('Miss!')
-                console.log('Miss!');
+                // console.log('Miss!');
                 game.ammo -= 1;
             }
         } else {
-            if (game.ammo = 0) {
-                console.log('You need to reload!');
+            if (game.ammo == 0) {
+                // console.log('You need to reload!');
+                $('#msgBox').text('Out of ammo!')
             }
         }
     },
@@ -46,7 +50,7 @@ const user = {
                         } else {
                             if (game.ammo = 5) {
                                 $('#msgBox').text('Ammo full.')
-                                console.log('Ammo is full');
+                                // console.log('Ammo is full');
                             }
                         }
                     }
@@ -63,7 +67,6 @@ const game = {
     ammo: 5,
     targets: [],
     intervalId: null,
-    // auxInterval: null,
     currentDuck: [],
     startGame() { //function to begin the game
         this.rounds += 1;
@@ -73,62 +76,61 @@ const game = {
             $('#score').text('Score: ' + this.score) //adds current score to #score div
             $('#ammo').text('Shots: ' + this.ammo)
             // console.log(this.time);
-            this.roundCounter();
+            // this.roundCounter();
+            if(this.time % 4 === 0){
+            this.newDuck();
+            }
             if (this.ammo == 0) {
                 $('#msgBox').text('Reload to continue shooting!')
             }
-        }, 250)
+        }, 1000)
         this.createTargets(); //this function calls the below function to begin creating Targets
         this.newDuck(); //calls the newDuck function to put a new duck on the screen
     },
-    roundCounter() {
-        //add 1 to the game round count
-        //when time reaches 60 seconds => stop game, call start game function?
-        //increase rate at which ducks move across the screen
-        if (this.time % 60 === 0 && this.time > 0) {
-            this.rounds += 1;
-            clearInterval(this.intervalId)
-            console.log('game stopped...')
-            this.time = 0;
-            game.currentDuck.pop() //removes the duck from game.currentDuck array
-            $('img').remove() //remove parent div of duckPic from the DOM/screen
-            //store player 1 round 1 score in an array?
-            //add message indicating that round 2 will begin
-            //call startGame() function to start the new round
-            let secondsLeft = 3;
-            let auxInterval = setInterval(() => {
-                if (secondsLeft > 0) {
-                    console.log('Round ' + this.rounds + ' starts in ' + secondsLeft);
-                    $('#msgBox').text('Round ' + this.rounds + ' starts in ' + secondsLeft)
-                    secondsLeft -= 1;
-                }
-                else {
-                    clearInterval(auxInterval)
-                    this.startGame();
+    // roundCounter() {
+    //     //add 1 to the game round count
+    //     //when time reaches 60 seconds => stop game, call start game function?
+    //     //increase rate at which ducks move across the screen
+    //     if (this.time % 60 === 0 && this.time > 0) {
+    //         this.rounds += 1;
+    //         clearInterval(this.intervalId)
+    //         console.log('game stopped...')
+    //         this.time = 0;
+    //         game.currentDuck.pop() //removes the duck from game.currentDuck array
+    //         $('img').remove() //remove parent div of duckPic from the DOM/screen
+    //         //store player 1 round 1 score in an array?
+    //         //add message indicating that round 2 will begin
+    //         //call startGame() function to start the new round
+    //         let secondsLeft = 3;
+    //         let auxInterval = setInterval(() => {
+    //             if (secondsLeft > 0) {
+    //                 console.log('Round ' + this.rounds + ' starts in ' + secondsLeft);
+    //                 $('#msgBox').text('Round ' + this.rounds + ' starts in ' + secondsLeft)
+    //                 secondsLeft -= 1;
+    //             }
+    //             else {
+    //                 clearInterval(auxInterval)
+    //                 this.startGame();
 
-                }
-            }, 1000)
+    //             }
+    //         }, 1000)
 
-        }
-    },
+    //     }
+    // },
     createTargets() { //function to instantiate targets in a loop and store them in an array
         for (let i = 0; i < 50; i++) {
-            const newTarget = new Target()
+            const newTarget = new Target(i)
             this.targets.push(newTarget)
         }
         // console.log(this.targets);
-    },
-    move() {
-        // if there's a current duck
-        // move it
-
     },
     newDuck() {
         // get duck from array, make it be current duck
         this.currentDuck.push(this.targets[0])
         // console.log(this.currentDuck);
         // jquery -- create div and put it in its row 
-        const newDuckDiv = $('<div/>')
+        const newDuckDiv = $('<div/>').attr('id', `${this.currentDuck.id}`)
+        console.log(newDuckDiv.attr('style'));
         const duckPic = $('<img/>').addClass("duck") // give the duckPic a class 
         duckPic.attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif")
         newDuckDiv.append(duckPic)
@@ -156,28 +158,22 @@ const game = {
             }
         }
         this.targets.shift() // removes the first element from the game.targets array
-        newDuckDiv.animate({
-            marginLeft: "+=521px"
-        }, 
-        // how long the animation should take
-        5000, 
-        // what should happen when the animation is done
-        () => {
-            console.log("duck is done moving");
-            // remove duck w/ jquery
-        })
 
-        // newDuckDiv.animate({
-        //     transform: scaleX(-1)
-        //     marginLeft: "-=521px"
-        // }, 2000)
+        newDuckDiv.animate({ // animates the div holding the duck img to move across the screen
+                marginLeft: "+=521px"
+            }, 
+            // how long the animation should take
+            5000, 
+            // what should happen when the animation is done
+            () => {
+                console.log("duck is done moving")
+                    this.currentDuck.pop() //removes the duck from game.currentDuck array
+                    // $('img').remove() //remove parent div of duckPic from the DOM/screen
+                    newDuckDiv.remove();
+                    // this.newDuck() //call newDuck() function
+            }
+        )
 
-        // if(this.currentDuck.marginLeft = "510px"){
-        //     this.currentDuck.pop() //removes the duck from game.currentDuck array
-        //     $('img').remove() //remove parent div of duckPic from the DOM/screen
-        //     this.newDuck() //call newDuck() function
-        //     //if the newDuckDiv reaches 510px, then remove it
-        // }
     }
     // 1. start --  get new duck
     // 2. previous duck goes off screen  -- destroy the old duck, get new duck
@@ -219,4 +215,8 @@ $('#screen').on('click', (e) => {
 // add listener for #screen
     // user.shoot(e.target);
 
+$(document).on('keydown', (e) => {
+    if(e.key==" ") {
 
+    }
+})
