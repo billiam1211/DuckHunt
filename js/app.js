@@ -56,6 +56,8 @@ const user = {
 }
 const game = {
     score: 0,
+    player1: true,
+    player2: false,
     player1Score: 0,
     player2Score: 0,
     time: null,
@@ -112,16 +114,11 @@ const game = {
             return
 
         }else{
-
         const duckPic = $('<img/>').addClass("duck").attr("src", "https://media3.giphy.com/media/pSJbJNaiTl6mc/giphy.gif") // give the duckPic a class and add image of duck
-
         const duckID = "duck-" + this.readyTargets[0][0].id
-
         duckPic.attr("id", duckID)
-
         this.currentDuck.push(this.readyTargets[0])
         this.currentDuck[0].append(duckPic)
-
         if (this.targets[0].row == 1) {
             this.currentDuck[0].appendTo($('#row1'))
         } else {
@@ -182,11 +179,9 @@ const game = {
     // 3. duck gets shot -- destroy old duck, get new duck
     // when duck gets shot, remember to destroy div
 }
-
 $('#ammo').on('click', () => {
     //this is a counter showing how many shots the user currently has
 })
-
 $('#reload').on('click', () => {
     user.reload()
     console.log('reloading!!!');
@@ -202,22 +197,26 @@ $('#duck').on('click', (event) => {
     // call user.shoot(), pass in that info
     console.log('duck has been clicked');
 })
-
 $('#screen').on('click', (e) => {
     console.log('screen has been clicked');
     user.shoot(e.target);
 })
 // add listener for #screen
 // user.shoot(e.target);
-
 $(document).on('keydown', (e) => {
     if (e.key == " ") {
-
     }
 })
 
+$('#music').on('mouseover', () => {
+    console.log('Mouse over music player');
+    $('#music').css('opacity', .5)
+})
+$('#music').on('mouseout', () => {
+    console.log('Mouse off music player');
+    $('#music').css('opacity', 0)
+})
 // for debugging -- gives you console access to the most recently clicked element as $it
-
 // let $it;
 // $(document).on('click', (e) => {
 //     $it = $(e.target);
