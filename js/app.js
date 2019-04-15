@@ -87,7 +87,7 @@ const game = {
     },
     gameOver() {
         clearInterval(this.intervalId)
-        $('#msgBox').text('GAME OVER!! Score: ' + game.score)
+        $('#msgBox').text('GAME OVER!! Score: ' + this.score)
 
     },
     createTargets() { //function to instantiate targets in a loop and store them in an array
